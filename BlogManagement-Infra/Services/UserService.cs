@@ -1,4 +1,5 @@
 ﻿using BlogManagement_Core.DTOs.Authantication;
+using BlogManagement_Core.DTOs.Blogs;
 using BlogManagement_Core.Entites;
 using BlogManagement_Core.IRepos;
 using BlogManagement_Core.IService;
@@ -17,6 +18,30 @@ namespace BlogManagement_Infra.Services
         {
             _repository = repository;
         }
+
+        public async Task<List<BlogCardDTO>> GetBlogs()
+        {
+            var entites = await _repository.GetBlogsEntity();
+            List<BlogCardDTO> blogCards = new List<BlogCardDTO>();
+            foreach (var blog in entites)
+            {
+                blogCards.Add(new BlogCardDTO()
+                {
+                    Id=blog.Id,
+                    Title = blog.Title,
+                    Image = blog.ImagePath,
+                    Author = blog.Author,
+                    CreateDate = blog.CreationTime.ToString()
+                });
+            }
+            return blogCards;
+        }
+
+        public async Task<List<BlogCardDTO>> GetBlogsByRepos()
+        {
+            return await _repository.GetBlogsDTOsDirect();
+        }
+
         public async Task RegisterNewClient(RegistrationDTO input)
         {
            //setup for entities 

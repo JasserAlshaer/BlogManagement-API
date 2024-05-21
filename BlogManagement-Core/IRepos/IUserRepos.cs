@@ -1,4 +1,5 @@
-﻿using BlogManagement_Core.Entites;
+﻿using BlogManagement_Core.DTOs.Blogs;
+using BlogManagement_Core.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,8 @@ namespace BlogManagement_Core.IRepos
     {
         Task<int> CreateUserAndGetId(User input);
         Task CreateLogin(Login input);
+        //get ALL
+        Task<List<Blog>> GetBlogsEntity();
+        Task<List<BlogCardDTO>> GetBlogsDTOsDirect();
     }
 }

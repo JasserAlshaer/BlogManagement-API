@@ -14,6 +14,32 @@ namespace BlogManagement_API.Controllers
         {
             _service = service;
         }
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetUserBlogs()
+        {
+            try
+            {
+                return StatusCode(201, await _service.GetBlogs());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, $"Error Orrued {ex.Message}");
+            }
+        }
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetUserBlogsByRepos()
+        {
+            try
+            {
+                return StatusCode(201, await _service.GetBlogsByRepos());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, $"Error Orrued {ex.Message}");
+            }
+        }
         [HttpPost]
         [Route("CreateNewAccount")]
         public async Task<IActionResult> CreateNewAccount([FromBody] RegistrationDTO input)
@@ -35,5 +61,6 @@ namespace BlogManagement_API.Controllers
                 }
             }
         }
+
     }
 }
