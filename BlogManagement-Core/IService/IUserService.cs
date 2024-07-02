@@ -1,5 +1,6 @@
 ﻿using BlogManagement_Core.DTOs.Authantication;
 using BlogManagement_Core.DTOs.Blogs;
+using BlogManagement_Core.DTOs.Subscription;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace BlogManagement_Core.IService
         Task RegisterNewClient(RegistrationDTO input);
         Task<List<BlogCardDTO>> GetBlogs();
         Task<List<BlogCardDTO>> GetBlogsByRepos();
+        Task SetNewSubscrubtion(CreateNewSubsucriptionDTO input);
     }
 }

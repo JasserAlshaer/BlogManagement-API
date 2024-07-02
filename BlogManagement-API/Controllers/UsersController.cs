@@ -1,5 +1,6 @@
 ﻿using BlogManagement_Core.DTOs.Authantication;
 using BlogManagement_Core.DTOs.Blogs;
+using BlogManagement_Core.DTOs.Subscription;
 using BlogManagement_Core.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -119,6 +120,27 @@ namespace BlogManagement_API.Controllers
                 {
                     await _service.CreateNewBlog(input);
                     return StatusCode(201, "New Blog Has Been Created");
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(503, $"Error Orrued {ex.Message}");
+                }
+            }
+        }
+        [HttpPost]
+        [Route("PayandGetNewSubscription")]
+        public async Task<IActionResult> PayandGetNewSubscription([FromBody] CreateNewSubsucriptionDTO input)
+        {
+            if (input == null)
+            {
+                return BadRequest("Please Fill All Data");
+            }
+            else
+            {
+                try
+                {
+                    await _service.SetNewSubscrubtion(input);
+                    return StatusCode(201, "New Subscription Has Been Created");
                 }
                 catch (Exception ex)
                 {

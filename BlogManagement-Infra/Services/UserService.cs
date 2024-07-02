@@ -1,5 +1,6 @@
 ﻿using BlogManagement_Core.DTOs.Authantication;
 using BlogManagement_Core.DTOs.Blogs;
+using BlogManagement_Core.DTOs.Subscription;
 using BlogManagement_Core.Entites;
 using BlogManagement_Core.IRepos;
 using BlogManagement_Core.IService;
@@ -138,6 +139,45 @@ namespace BlogManagement_Infra.Services
             };
             //move to repos
             await _repository.CreateLogin(login);
+        }
+
+        public async Task SetNewSubscrubtion(CreateNewSubsucriptionDTO input)
+        {
+            //check if exisit 
+            var user = await _repository.GetUserById(input.UserId);
+            var subscrubtion = await _repository.GetSubscrtiptionById(input.SubscriptionId);
+            if (user != null && subscrubtion != null)
+            {
+                //Payment 
+                var paymentMethod = await _repository.IsValidPayment(input.Code,
+                    input.CardNumber,input.CardHolder,subscrubtion.Price);
+                if (paymentMethod != null) {
+                    paymentMethod.Balance -= subscrubtion.Price;
+                    UserSubscription userSubscription = new UserSubscription()
+                    {
+                        User = user,
+                        Subscribtion= subscrubtion, 
+                        StartDate = DateTime.Now,
+                        EndDate = DateTime.Now.AddDays(subscrubtion.DurationInDay),
+                    };
+                    await _repository.UpdateEntity(paymentMethod);
+                    var id = await _repository.InsertSubscribationAndGetId(userSubscription);
+                    if(id == 0)
+                    {
+                        paymentMethod.Balance += subscrubtion.Price;
+                        await _repository.UpdateEntity(paymentMethod);
+                        throw new Exception("Invalid Operation  Failed To Create Subscribtion");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Invalid Payment Method");
+                }
+            }
+            else
+            {
+                throw new Exception("User or Subscrintion Dose not Exisit");
+            }
         }
 
         public async Task UpdateBlog(UpdateBlogDTO input)

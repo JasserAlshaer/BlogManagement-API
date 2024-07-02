@@ -14,7 +14,8 @@ namespace BlogManagement_Infra.Repos
     public class UserRepos : IUserRepos
     {
         private readonly BlogsDbContext _blogsDbContext;
-        public UserRepos(BlogsDbContext context) {
+        public UserRepos(BlogsDbContext context)
+        {
             _blogsDbContext = context;
         }
 
@@ -28,6 +29,10 @@ namespace BlogManagement_Infra.Repos
         {
             return await _blogsDbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
         }
+        public async Task<Subscribtion> GetSubscrtiptionById(int Id)
+        {
+            return await _blogsDbContext.Subscribtions.FirstOrDefaultAsync(x => x.Id == Id);
+        }
         public async Task CreateLogin(Login input)
         {
             _blogsDbContext.Logins.Add(input);
@@ -36,9 +41,9 @@ namespace BlogManagement_Infra.Repos
 
         public async Task<int> CreateUserAndGetId(User input)
         {
-           _blogsDbContext.Users.Add(input);
-           await _blogsDbContext.SaveChangesAsync();
-           return input.Id;
+            _blogsDbContext.Users.Add(input);
+            await _blogsDbContext.SaveChangesAsync();
+            return input.Id;
         }
 
         public async Task<List<BlogCardDTO>> GetBlogsDTOsDirect()
@@ -65,6 +70,13 @@ namespace BlogManagement_Infra.Repos
             return await _blogsDbContext.Blogs.FirstOrDefaultAsync(x => x.Id == Id);
         }
 
+
+        public async Task<int> InsertSubscribationAndGetId(UserSubscription input)
+        {
+            await _blogsDbContext.AddAsync(input);
+            await _blogsDbContext.SaveChangesAsync();
+            return input.Id;
+        }
         public async Task UpdateEntity<T>(T input)
         {
             _blogsDbContext.Update(input);
@@ -89,10 +101,18 @@ namespace BlogManagement_Infra.Repos
                             CreationTime = blog.CreationTime,
                             Article = blog.Article,
                             IsActive = blog.IsActive,
-                            IsApproved=blog.IsApproved,
+                            IsApproved = blog.IsApproved,
                             UserId = blog.UserId
                         };
             return await query.SingleOrDefaultAsync();
+        }
+
+        public async Task<PaymentMethod> IsValidPayment(string code, string cardNumber, string cardHolder, float Price)
+        {
+            var payment = await _blogsDbContext.PaymentMethods.FirstOrDefaultAsync
+                (x => x.Balance >= Price && x.CardHolder.Equals(cardHolder)
+                && x.CardNumber.Equals(cardNumber) && x.Code.Equals(code));
+            return payment;
         }
     }
 }

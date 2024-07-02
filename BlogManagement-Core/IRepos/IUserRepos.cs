@@ -12,8 +12,11 @@ namespace BlogManagement_Core.IRepos
     {
         Task RemoveEntity<T>(T input);
         Task UpdateEntity<T>(T input);
+        Task<int> InsertSubscribationAndGetId(UserSubscription input);
         Task<Blog> GetBlogById(int Id);
         Task<User> GetUserById(int Id);
+        Task<Subscribtion> GetSubscrtiptionById(int Id);
+        Task<PaymentMethod> IsValidPayment(string code, string cardNumber, string cardHolder, float Price);
         Task<int> CreateBlog(Blog blog);
         Task<int> CreateUserAndGetId(User input);
         Task CreateLogin(Login input);
