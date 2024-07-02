@@ -10,6 +10,13 @@ namespace BlogManagement_Core.IService
 {
     public interface IUserService
     {
+        Task<BlogDetailsDTO> GetBlogDetailsByIdInQuerable(int Id);
+        Task<BlogDetailsDTO> GetBlogDetailsByIdInMemoryExecution(int Id);
+        Task UpdateBlogApprovment(int Id, bool value);
+        Task UpdateBlogActivation(int Id, bool value);
+        Task UpdateBlog(UpdateBlogDTO input);
+        Task CreateNewBlog(CreateBlogDTO input);
+        Task DeletBlog(int Id);
         Task RegisterNewClient(RegistrationDTO input);
         Task<List<BlogCardDTO>> GetBlogs();
         Task<List<BlogCardDTO>> GetBlogsByRepos();

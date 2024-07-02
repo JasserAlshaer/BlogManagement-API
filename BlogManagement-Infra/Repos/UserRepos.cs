@@ -17,6 +17,17 @@ namespace BlogManagement_Infra.Repos
         public UserRepos(BlogsDbContext context) {
             _blogsDbContext = context;
         }
+
+        public async Task<int> CreateBlog(Blog blog)
+        {
+            _blogsDbContext.Blogs.Add(blog);
+            await _blogsDbContext.SaveChangesAsync();
+            return blog.Id;
+        }
+        public async Task<User> GetUserById(int Id)
+        {
+            return await _blogsDbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
+        }
         public async Task CreateLogin(Login input)
         {
             _blogsDbContext.Logins.Add(input);
@@ -47,6 +58,41 @@ namespace BlogManagement_Infra.Repos
         public async Task<List<Blog>> GetBlogsEntity()
         {
             return await _blogsDbContext.Blogs.ToListAsync();
+        }
+
+        public async Task<Blog> GetBlogById(int Id)
+        {
+            return await _blogsDbContext.Blogs.FirstOrDefaultAsync(x => x.Id == Id);
+        }
+
+        public async Task UpdateEntity<T>(T input)
+        {
+            _blogsDbContext.Update(input);
+            await _blogsDbContext.SaveChangesAsync();
+        }
+        public async Task RemoveEntity<T>(T input)
+        {
+            _blogsDbContext.Remove(input);
+            await _blogsDbContext.SaveChangesAsync();
+        }
+
+        public async Task<BlogDetailsDTO> GetBlogDetails(int Id)
+        {
+            var query = from blog in _blogsDbContext.Blogs
+                        where blog.Id == Id
+                        select new BlogDetailsDTO
+                        {
+                            Id = blog.Id,
+                            Title = blog.Title,
+                            ImagePath = blog.ImagePath,
+                            Author = blog.Author,
+                            CreationTime = blog.CreationTime,
+                            Article = blog.Article,
+                            IsActive = blog.IsActive,
+                            IsApproved=blog.IsApproved,
+                            UserId = blog.UserId
+                        };
+            return await query.SingleOrDefaultAsync();
         }
     }
 }

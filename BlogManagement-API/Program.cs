@@ -4,6 +4,7 @@ using BlogManagement_Core.IService;
 using BlogManagement_Infra.Repos;
 using BlogManagement_Infra.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepos, UserRepos>();
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -26,6 +28,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles(); // To serve files 
+// Add custom static files middleware
+var imagesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Images");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(imagesDirectory),
+    RequestPath = "/Images"
+});
+
 
 app.UseAuthorization();
 
