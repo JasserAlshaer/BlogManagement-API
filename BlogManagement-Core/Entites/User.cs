@@ -14,6 +14,8 @@ namespace BlogManagement_Core.Entites
         public string Phone { get; set; }
         public DateTime JoinDate { get; set; }
         public bool IsActive { get; set; } 
+        public string Key { get; set; }
+        public string Iv { get; set; }
         public virtual ICollection<UserSubscription>UserSubscriptions { get; set; } 
     }
 }

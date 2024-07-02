@@ -1,6 +1,7 @@
 ﻿using BlogManagement_Core.DTOs.Authantication;
 using BlogManagement_Core.DTOs.Blogs;
 using BlogManagement_Core.DTOs.Subscription;
+using BlogManagement_Core.DTOs.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace BlogManagement_Core.IService
 {
     public interface IUserService
     {
+        Task<UserProfileDTO> GetUserProfileById(int Id);
         Task<BlogDetailsDTO> GetBlogDetailsByIdInQuerable(int Id);
         Task<BlogDetailsDTO> GetBlogDetailsByIdInMemoryExecution(int Id);
         Task UpdateBlogApprovment(int Id, bool value);

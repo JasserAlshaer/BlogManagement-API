@@ -16,6 +16,21 @@ namespace BlogManagement_API.Controllers
         {
             _service = service;
         }
+
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetUserProfileById(int Id)
+        {
+            try
+            {
+                return StatusCode(201, await _service.GetUserProfileById(Id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, $"Error Orrued {ex.Message}");
+            }
+        }
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetUserBlogs()
@@ -44,7 +59,7 @@ namespace BlogManagement_API.Controllers
         }
         [HttpGet]
         [Route("[action]/{Id}")]
-        public async Task<IActionResult> GetBlogDetails([FromRoute]int Id)
+        public async Task<IActionResult> GetBlogDetails([FromRoute] int Id)
         {
             if (Id == 0)
             {
@@ -171,7 +186,7 @@ namespace BlogManagement_API.Controllers
         }
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> UpdateBlogApprovement([FromQuery]int Id, [FromQuery] bool value)
+        public async Task<IActionResult> UpdateBlogApprovement([FromQuery] int Id, [FromQuery] bool value)
         {
             if (Id == 0)
             {
@@ -181,7 +196,7 @@ namespace BlogManagement_API.Controllers
             {
                 try
                 {
-                    await _service.UpdateBlogApprovment(Id,value);
+                    await _service.UpdateBlogApprovment(Id, value);
                     return StatusCode(200, "Blog Has Been Update");
                 }
                 catch (Exception ex)

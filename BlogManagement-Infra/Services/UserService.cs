@@ -1,12 +1,15 @@
 ﻿using BlogManagement_Core.DTOs.Authantication;
 using BlogManagement_Core.DTOs.Blogs;
 using BlogManagement_Core.DTOs.Subscription;
+using BlogManagement_Core.DTOs.Users;
 using BlogManagement_Core.Entites;
+using BlogManagement_Core.Helper;
 using BlogManagement_Core.IRepos;
 using BlogManagement_Core.IService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -119,22 +122,50 @@ namespace BlogManagement_Infra.Services
             return await _repository.GetBlogsDTOsDirect();
         }
 
+        public async Task<UserProfileDTO> GetUserProfileById(int Id)
+        {
+            var user = await _repository.GetUserById(Id);
+            if(user != null)
+            {
+                UserProfileDTO user1 = new UserProfileDTO()
+                {
+                    Email = EncryptionHelper.DecryptedString(user.Email, Convert.FromBase64String(user.Key), Convert.FromBase64String(user.Iv)),
+                    Id= user.Id,    
+                    Name = EncryptionHelper.DecryptedString(user.Name, Convert.FromBase64String(user.Key), Convert.FromBase64String(user.Iv)),    
+                    Phone = EncryptionHelper.DecryptedString(user.Phone,Convert.FromBase64String(user.Key), Convert.FromBase64String(user.Iv)),
+                };
+                return user1;
+            }
+            else
+            {
+                throw new Exception("User Dose not Exisit");
+            }
+        }
+
         public async Task RegisterNewClient(RegistrationDTO input)
         {
+            string key, Iv;
+            using (Aes aes = Aes.Create())
+            {
+                key = Convert.ToBase64String(aes.Key);
+                Iv = Convert.ToBase64String(aes.IV);
+            }
             //setup for entities 
             User user = new User()
             {
-                Email = input.Email,
+                Email = EncryptionHelper.GetEncryptedString(input.Email,Convert.FromBase64String(key), Convert.FromBase64String(Iv)),
                 JoinDate = DateTime.Now,
-                Phone = input.Phone,
-                Name = input.Name,
+                Phone = EncryptionHelper.GetEncryptedString(input.Phone, Convert.FromBase64String(key), Convert.FromBase64String(Iv)),
+                Name = EncryptionHelper.GetEncryptedString(input.Name, Convert.FromBase64String(key), Convert.FromBase64String(Iv)),
+                Iv =Iv,
+                Key=key
             };
             //move to repos
             int entityId = await _repository.CreateUserAndGetId(user);
             Login login = new Login()
             {
-                Username = input.Email,
-                Password = input.Password,
+                Username = HashingHelper.GenerateSHA384String(input.Email),
+                Password = HashingHelper.GenerateSHA384String(input.Password),
                 UserId = entityId
             };
             //move to repos

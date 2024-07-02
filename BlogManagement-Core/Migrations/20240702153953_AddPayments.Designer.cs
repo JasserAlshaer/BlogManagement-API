@@ -4,6 +4,7 @@ using BlogManagement_Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogManagement_Core.Migrations
 {
     [DbContext(typeof(BlogsDbContext))]
-    partial class BlogsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240702153953_AddPayments")]
+    partial class AddPayments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace BlogManagement_Core.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 2, 19, 46, 32, 950, DateTimeKind.Local).AddTicks(2210));
+                        .HasDefaultValue(new DateTime(2024, 7, 2, 18, 39, 53, 503, DateTimeKind.Local).AddTicks(2532));
 
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
@@ -183,18 +186,10 @@ namespace BlogManagement_Core.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<string>("Iv")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("JoinDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 2, 19, 46, 32, 948, DateTimeKind.Local).AddTicks(1393));
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasDefaultValue(new DateTime(2024, 7, 2, 18, 39, 53, 501, DateTimeKind.Local).AddTicks(7654));
 
                     b.Property<string>("Name")
                         .IsRequired()
