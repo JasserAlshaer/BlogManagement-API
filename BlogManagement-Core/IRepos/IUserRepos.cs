@@ -10,6 +10,7 @@ namespace BlogManagement_Core.IRepos
 {
     public interface IUserRepos
     {
+        Task<int> GetUserIdAfterLoginOperation(string email, string password);
         Task RemoveEntity<T>(T input);
         Task UpdateEntity<T>(T input);
         Task<int> InsertSubscribationAndGetId(UserSubscription input);

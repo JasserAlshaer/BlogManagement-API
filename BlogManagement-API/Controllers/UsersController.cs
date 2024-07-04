@@ -1,6 +1,7 @@
 ﻿using BlogManagement_Core.DTOs.Authantication;
 using BlogManagement_Core.DTOs.Blogs;
 using BlogManagement_Core.DTOs.Subscription;
+using BlogManagement_Core.Helper;
 using BlogManagement_Core.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,11 +47,15 @@ namespace BlogManagement_API.Controllers
         }
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetUserBlogsByRepos()
+        public async Task<IActionResult> GetUserBlogsByRepos([FromHeader] string token)
         {
             try
             {
-                return StatusCode(201, await _service.GetBlogsByRepos());
+                if (TokenHelper.IsValidToken(token))
+                {
+                    return StatusCode(201, await _service.GetBlogsByRepos());
+                }
+                return StatusCode(401, "You're Unautharized to Use This Funcationality");
             }
             catch (Exception ex)
             {
@@ -114,6 +119,27 @@ namespace BlogManagement_API.Controllers
                 {
                     await _service.RegisterNewClient(input);
                     return StatusCode(201, "New Account Has Been Created");
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(503, $"Error Orrued {ex.Message}");
+                }
+            }
+        }
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] AuthanticationDTO input)
+        {
+            if (input == null)
+            {
+                return BadRequest("Please Fill All Data");
+            }
+            else
+            {
+                try
+                {
+                    var token = await _service.GenerateUserAccessToken(input);
+                    return StatusCode(200, token);
                 }
                 catch (Exception ex)
                 {

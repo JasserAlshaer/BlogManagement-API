@@ -18,6 +18,14 @@ namespace BlogManagement_Infra.Repos
         {
             _blogsDbContext = context;
         }
+        public async Task<int> GetUserIdAfterLoginOperation(string email, string password)
+        {
+            var query = from login in _blogsDbContext.Logins
+                        where login.Username == email
+                        && login.Password == password
+                        select login.UserId;
+            return await query.SingleOrDefaultAsync();
+        }
 
         public async Task<int> CreateBlog(Blog blog)
         {

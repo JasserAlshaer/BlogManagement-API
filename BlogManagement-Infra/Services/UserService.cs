@@ -264,5 +264,31 @@ namespace BlogManagement_Infra.Services
                 throw new Exception("Blog Dose not Exisit");
             }
         }
+
+        public async Task<string> GenerateUserAccessToken(AuthanticationDTO input)
+        {
+            var user = await TryAuthanticate(input);
+            if(user != null)
+            {
+                return TokenHelper.GenerateJwtToken(user);
+            }
+            throw new Exception("Failed To Generate Token");
+        }
+        public async Task<User> TryAuthanticate(AuthanticationDTO input)
+        {
+            input.UserName = HashingHelper.GenerateSHA384String(input.UserName);
+            input.Password = HashingHelper.GenerateSHA384String(input.Password);
+
+            var userId = await _repository.GetUserIdAfterLoginOperation(input.UserName, input.Password);
+            if(userId != 0)
+            {
+                return await _repository.GetUserById(userId);
+            }
+            else
+            {
+                throw new Exception("Wrong Email / Password");
+            }
+
+        }
     }
 }
