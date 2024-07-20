@@ -47,6 +47,19 @@ namespace BlogManagement_API.Controllers
         }
         [HttpGet]
         [Route("[action]")]
+        public async Task<IActionResult> GetSubscribtions()
+        {
+            try
+            {
+                return StatusCode(201, await _service.GetSubscribtions());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, $"Error Orrued {ex.Message}");
+            }
+        }
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> GetUserBlogsByRepos([FromHeader] string token)
         {
             try

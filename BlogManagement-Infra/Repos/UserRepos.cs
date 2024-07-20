@@ -1,5 +1,6 @@
 ﻿using BlogManagement_Core.Context;
 using BlogManagement_Core.DTOs.Blogs;
+using BlogManagement_Core.DTOs.Subscription;
 using BlogManagement_Core.Entites;
 using BlogManagement_Core.IRepos;
 using Microsoft.EntityFrameworkCore;
@@ -121,6 +122,19 @@ namespace BlogManagement_Infra.Repos
                 (x => x.Balance >= Price && x.CardHolder.Equals(cardHolder)
                 && x.CardNumber.Equals(cardNumber) && x.Code.Equals(code));
             return payment;
+        }
+
+        public async Task<List<SubscribtionDTO>> GetSubscribtions()
+        {
+            var query = from sub in _blogsDbContext.Subscribtions
+                        select new SubscribtionDTO
+                        {
+                            Id = sub.Id,
+                            Name = sub.Name,
+                            DurationInDay = sub.DurationInDay,  
+                            Price= sub.Price,
+                        };
+            return await query.ToListAsync();
         }
     }
 }

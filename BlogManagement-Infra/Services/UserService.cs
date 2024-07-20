@@ -141,7 +141,10 @@ namespace BlogManagement_Infra.Services
                 throw new Exception("User Dose not Exisit");
             }
         }
-
+        public async Task<List<SubscribtionDTO>> GetSubscribtions()
+        {
+            return await _repository.GetSubscribtions();
+        }
         public async Task RegisterNewClient(RegistrationDTO input)
         {
             string key, Iv;

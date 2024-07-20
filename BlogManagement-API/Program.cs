@@ -17,6 +17,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BlogsDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("Local")));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepos, UserRepos>();
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(name: "default", builder =>
+    {
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
 
 
@@ -39,7 +49,10 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 
+
 app.UseAuthorization();
+
+app.UseCors("default");
 
 app.MapControllers();
 

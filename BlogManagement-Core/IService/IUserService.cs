@@ -13,6 +13,7 @@ namespace BlogManagement_Core.IService
 {
     public interface IUserService
     {
+        Task<List<SubscribtionDTO>> GetSubscribtions();
         Task<string> GenerateUserAccessToken(AuthanticationDTO input);
         Task<User> TryAuthanticate(AuthanticationDTO input);
         Task<UserProfileDTO> GetUserProfileById(int Id);

@@ -1,4 +1,5 @@
 ﻿using BlogManagement_Core.DTOs.Blogs;
+using BlogManagement_Core.DTOs.Subscription;
 using BlogManagement_Core.Entites;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace BlogManagement_Core.IRepos
         Task<int> GetUserIdAfterLoginOperation(string email, string password);
         Task RemoveEntity<T>(T input);
         Task UpdateEntity<T>(T input);
+        Task<List<SubscribtionDTO>> GetSubscribtions();
         Task<int> InsertSubscribationAndGetId(UserSubscription input);
         Task<Blog> GetBlogById(int Id);
         Task<User> GetUserById(int Id);
