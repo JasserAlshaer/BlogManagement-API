@@ -47,6 +47,20 @@ namespace BlogManagement_API.Controllers
         }
         [HttpGet]
         [Route("[action]")]
+        public async Task<IActionResult> GetUserBlogByUserId(int Id)
+        {
+            try
+            {
+                var result = await _service.GetUserBlogByUserId(Id);
+                return StatusCode(201, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, $"Error Orrued {ex.Message}");
+            }
+        }
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> GetSubscribtions()
         {
             try

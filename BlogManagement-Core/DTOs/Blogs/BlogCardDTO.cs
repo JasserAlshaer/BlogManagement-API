@@ -13,5 +13,6 @@ namespace BlogManagement_Core.DTOs.Blogs
         public string Image      { get; set; }
         public string CreateDate { get; set; }
         public string Author      { get; set; }
+        public int AuthorId { get; set; }
     }
 }

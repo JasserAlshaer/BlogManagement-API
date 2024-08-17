@@ -19,6 +19,7 @@ namespace BlogManagement_Core.IService
         Task<UserProfileDTO> GetUserProfileById(int Id);
         Task<BlogDetailsDTO> GetBlogDetailsByIdInQuerable(int Id);
         Task<BlogDetailsDTO> GetBlogDetailsByIdInMemoryExecution(int Id);
+        Task<List<BlogUserDTO>> GetUserBlogByUserId(int Id);
         Task UpdateBlogApprovment(int Id, bool value);
         Task UpdateBlogActivation(int Id, bool value);
         Task UpdateBlog(UpdateBlogDTO input);

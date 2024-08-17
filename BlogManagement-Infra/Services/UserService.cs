@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace BlogManagement_Infra.Services
 {
@@ -57,7 +58,19 @@ namespace BlogManagement_Infra.Services
                 throw new Exception("Blog Dose not Exisit");
             }
         }
+        public async Task<List<BlogUserDTO>> GetUserBlogByUserId(int Id)
+        {
+            var user = await _repository.GetUserById(Id);
+            if (user != null || Id == -1 )
+            {
+                return await _repository.GetUserBlogByUserId(Id);
+            }
+            else
+            {
+                throw new Exception("Blog Dose not Exisit");
+            }
 
+        }
         public async Task<BlogDetailsDTO> GetBlogDetailsByIdInMemoryExecution(int Id)
         {
             //check if exisit 
@@ -77,6 +90,10 @@ namespace BlogManagement_Infra.Services
                 if (string.IsNullOrEmpty(blogDetails.ImagePath))
                 {
                     blogDetails.ImagePath = "https://www.shutterstock.com/image-vector/concept-blogging-golden-blog-word-260nw-755744683.jpg";
+                }
+                else
+                {
+                    blogDetails.ImagePath = $"https://localhost:44363/Images/{blog.ImagePath}";
                 }
                 return blogDetails;
             }
@@ -109,8 +126,9 @@ namespace BlogManagement_Infra.Services
                 {
                     Id = blog.Id,
                     Title = blog.Title,
-                    Image = blog.ImagePath,
+                    Image = $"https://localhost:44363/Images/{blog.ImagePath}",
                     Author = blog.Author,
+                    AuthorId= blog.UserId,
                     CreateDate = blog.CreationTime.ToString()
                 });
             }

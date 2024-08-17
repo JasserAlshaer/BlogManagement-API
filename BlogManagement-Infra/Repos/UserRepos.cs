@@ -69,6 +69,39 @@ namespace BlogManagement_Infra.Repos
             return await query.ToListAsync();
         }
 
+        public async Task<List<BlogUserDTO>> GetUserBlogByUserId(int Id)
+        {
+            if(Id == -1)
+            {
+                var query2 = from blog in _blogsDbContext.Blogs
+                            where
+                             blog.IsActive == true
+                            select new BlogUserDTO
+                            {
+                                Id = blog.Id,
+                                Title = blog.Title,
+                                Article = blog.Article,
+                                Date = blog.CreationTime.ToString(),
+                                Status = blog.IsApproved == true ? "Activated" :
+                                blog.IsApproved == false ? "Rejected" : "Pending"
+                            };
+                return await query2.ToListAsync();
+            }
+            var query = from blog in _blogsDbContext.Blogs
+                        where blog.UserId == Id
+                        && blog.IsActive == true
+                        select new BlogUserDTO
+                        {
+                            Id = blog.Id,
+                            Title = blog.Title,
+                            Article = blog.Article,
+                            Date = blog.CreationTime.ToString(),
+                            Status = blog.IsApproved == true ? "Activated" :
+                            blog.IsApproved == false ? "Rejected" : "Pending"
+                        };
+            return await query.ToListAsync();
+        }
+
         public async Task<List<Blog>> GetBlogsEntity()
         {
             return await _blogsDbContext.Blogs.ToListAsync();

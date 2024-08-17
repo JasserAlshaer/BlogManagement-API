@@ -8,9 +8,9 @@ namespace BlogManagement_Core.DTOs.Blogs
 {
     public class CreateBlogDTO
     {
-        public string Title { get; set; }
-        public string Article { get; set; }
-        public string ImagePath { get; set; }
-        public int UserId { get; set; }
+        public string Title     { get; set; }
+        public string Article    { get; set; }
+        public string ImagePath  { get; set; }
+        public int    UserId    { get; set; }
     }
 }

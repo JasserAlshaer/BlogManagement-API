@@ -11,6 +11,7 @@ namespace BlogManagement_Core.IRepos
 {
     public interface IUserRepos
     {
+        Task<List<BlogUserDTO>> GetUserBlogByUserId(int Id);
         Task<int> GetUserIdAfterLoginOperation(string email, string password);
         Task RemoveEntity<T>(T input);
         Task UpdateEntity<T>(T input);
